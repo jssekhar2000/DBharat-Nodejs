@@ -13,6 +13,7 @@ const auth_routes = require('./routes/auth');
 app.use(bodyParser.json());
 
 app.use(cors());
+app.options('*', cors())
 
 // Connect to MongoDB
 mongoose.connect(DB_URL).then(() => {
