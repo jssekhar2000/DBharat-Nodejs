@@ -6,11 +6,13 @@ const transporter = nodemailer.createTransport({
   auth: {
     user : process.env.NODEMAILER_USER,
     pass : process.env.NODEMAILER_PASS
-  }
+  },
+  logger: true,
+  debug: true
 });
 
 const sendMailOnRegister = async (email = '', name='') => {
-   console.log(' On sendMailOnRegister', name,email);
+   console.log(' On sendMailOnRegister',process.env.NODEMAILER_USER,process.env.NODEMAILER_PASS);
     const mailOptions = {
         from: process.env.NODEMAILER_USER,
         to: `${email},Lalit.lkp@gmail.com,sekharmohanta2020@gmail.com` ,
