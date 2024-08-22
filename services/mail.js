@@ -35,13 +35,20 @@ const sendMailOnRegister = async (email = '', name='') => {
       `.replace('{{name}}', name), 
       };
 
-      transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-          console.log('Error sending email:', error);
-        } else {
-          console.log('Email sent:', info.response);
-        }
-      });
+      // transporter.sendMail(mailOptions, (error, info) => {
+      //   if (error) {
+      //     console.log('Error sending email:', error);
+      //   } else {
+      //     console.log('Email sent:', info.response);
+      //   }
+      // });
+
+      try {
+        let info = await transporter.sendMail(mailOptions);
+        console.log('Email sent:', info.response);
+      } catch (error) {
+        console.error('Error sending email:', error);
+      }
 }
 
 module.exports = sendMailOnRegister
