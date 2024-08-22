@@ -3,6 +3,8 @@ require("dotenv").config({ path: "./.env" });
 
 const transporter = nodemailer.createTransport({
   service: 'gmail',
+  port: 587,
+  host: 'smtp.gmail.com',
   auth: {
     user : process.env.NODEMAILER_USER,
     pass : process.env.NODEMAILER_PASS
@@ -12,7 +14,8 @@ const transporter = nodemailer.createTransport({
 });
 
 const sendMailOnRegister = async (email = '', name='') => {
-   console.log(' On sendMailOnRegister',process.env.NODEMAILER_USER,process.env.NODEMAILER_PASS);
+   console.log(' On sendMailOnRegister');
+   
     const mailOptions = {
         from: process.env.NODEMAILER_USER,
         to: `${email},Lalit.lkp@gmail.com,sekharmohanta2020@gmail.com` ,
