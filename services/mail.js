@@ -10,7 +10,7 @@ const transporter = nodemailer.createTransport({
 });
 
 const sendMailOnRegister = async (email = '', name='') => {
-
+   console.log(' On sendMailOnRegister', name,email);
     const mailOptions = {
         from: process.env.NODEMAILER_USER,
         to: `${email},Lalit.lkp@gmail.com,sekharmohanta2020@gmail.com` ,
