@@ -2,13 +2,14 @@ require("dotenv").config({ path: "./.env" });
 const express = require("express");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
+const sendMailOnRegister = require('../services/mail');
 
 const router = express.Router();
 const JWT_SECRET = process.env.JWT_SECRET;
 
 // Signup route
 router.post("/register", async (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, phone, college, email, password } = req.body;
   console.log(req.body);
 
   try {
@@ -19,12 +20,14 @@ router.post("/register", async (req, res) => {
         .json({ message: "User with this username or email already exists" });
     }
 
-    user = new User({ name, email, password });
+    user = new User({ name, email, password, college, phone });
     await user.save();
 
     const payload = { userId: user.id };
     const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "1h" });
-
+    
+    sendMailOnRegister(email, name);
+    
     res.status(201).json({
       data: {
         data: {
@@ -34,7 +37,19 @@ router.post("/register", async (req, res) => {
     });
   } catch (err) {
     console.error(err);
-    res.status(500).send("Server error");
+
+    if (err.name === "ValidationError") {
+      // Mongoose validation error
+      return res.status(400).json({ message: err.message });
+    }
+
+    if (err.code && err.code === 11000) {
+      // Duplicate key error (e.g., email already exists)
+      return res.status(400).json({ message: "Email already exists" });
+    }
+
+    // Generic server error
+    res.status(500).json({ message: "Server error" });
   }
 });
 

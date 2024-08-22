@@ -4,17 +4,45 @@ const bcrypt = require('bcryptjs');
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: true
+    required: [true, 'Name is required'],
+    trim: true
+  },
+  phone:{
+    type: String,
+    required: [true, 'Phone number is required'],
+    validate: {
+      validator: function(v) {
+        return /\d{10}/.test(v);
+      },
+      message: props => `${props.value} is not a valid phone number!`
+    },
+    trim: true,
+  },
+  college: {
+    type: String,
+    required: [true, 'College name is required'],
+    trim: true,
   },
   email: {
     type: String,
-    required: true,
-    unique: true
+    required: [true, 'Email is required'],
+    unique: true,
+    lowercase: true, // Ensure emails are stored in lowercase
+    trim: true,
+    validate: {
+      validator: function(v) {
+        return /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(v); // Basic email format validation
+      },
+      message: props => `${props.value} is not a valid email!`
+    }
   },
   password: {
     type: String,
-    required: true
+    required: [true, 'Password is required'],
   }
+},
+{
+  timestamps: true
 });
 
 // Hash the password before saving the user
