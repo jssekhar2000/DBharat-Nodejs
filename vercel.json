@@ -12,5 +12,5 @@
       "dest": "/app.js"
     }
   ],
-  "regions": ["ap-south-1"]
+  "regions": ["bom1"]
 }
