@@ -9,8 +9,8 @@ const transporter = nodemailer.createTransport({
     user : process.env.NODEMAILER_USER,
     pass : process.env.NODEMAILER_PASS
   },
-  logger: true,
-  debug: true
+  // logger: true,
+  // debug: true
 });
 
 const sendMailOnRegister = async (email = '', name='') => {
