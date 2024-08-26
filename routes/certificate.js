@@ -29,7 +29,7 @@ router.get('/downloadCertificate', authenticate, async (req, res) => {
         pdfStream.pipe(res);
     } catch (error) {
         console.error('Error generating certificate:', error);
-        res.status(500).send('Error generating certificate');
+        res.status(500).send('Error generating certificate',error);
     }
 });
 
