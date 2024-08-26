@@ -6,6 +6,7 @@ const fs = require('fs').promises;
 
 router.get('/downloadCertificate', authenticate, async (req, res) => {
     try {
+        console.log('certificate download started');
         const pdfStream = await generateCertificate(req.userId);
         pdfStream.on('error', (error) => {
             console.error('Error occured while streaming certificate', {
@@ -21,10 +22,14 @@ router.get('/downloadCertificate', authenticate, async (req, res) => {
             }
          });
         
+        console.log('header setting');
+
         res.setHeader('Content-Disposition', 'attachment; filename=certificate.pdf');
         res.setHeader('Content-Type', 'application/pdf');
         res.setHeader('X-Content-Name', `certificate.pdf`);
         res.attachment(`certificate.pdf`);
+
+        console.log('response sent');
         // res.send(pdfBuffer);
         pdfStream.pipe(res);
     } catch (error) {
