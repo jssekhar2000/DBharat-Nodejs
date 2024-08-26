@@ -7,6 +7,7 @@ const fs = require('fs').promises;
 router.get('/downloadCertificate', authenticate, async (req, res) => {
     try {
         console.log('certificate download started');
+        
         const pdfStream = await generateCertificate(req.userId);
         pdfStream.on('error', (error) => {
             console.error('Error occured while streaming certificate', {
