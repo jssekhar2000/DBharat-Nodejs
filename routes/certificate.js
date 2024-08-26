@@ -7,7 +7,7 @@ const fs = require('fs').promises;
 router.get('/downloadCertificate', authenticate, async (req, res) => {
     try {
         console.log('certificate download started');
-        
+
         const pdfStream = await generateCertificate(req.userId);
         pdfStream.on('error', (error) => {
             console.error('Error occured while streaming certificate', {
@@ -35,7 +35,10 @@ router.get('/downloadCertificate', authenticate, async (req, res) => {
         pdfStream.pipe(res);
     } catch (error) {
         console.error('Error generating certificate:', error);
-        res.status(500).send('Error generating certificate',error);
+        res.status(500).send({
+            message:'Error generating certificate',
+            error: error
+        });
     }
 });
 
