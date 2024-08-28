@@ -2,13 +2,13 @@ const puppeteer = require('puppeteer');
 const fs = require('fs');
 const path = require('path');
 const { Readable } = require('stream');
-const User = require('../models/User');
+const Student = require('../models/Student');
 
 const generateCertificate = async (userId) => {
 
   console.log('On generateCertificate');
 
-  const user = await User.findById(userId);
+  const user = await Student.findById(userId);
   
   if (!user) throw new Error('User not found');
 

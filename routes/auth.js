@@ -1,7 +1,7 @@
 require("dotenv").config({ path: "./.env" });
 const express = require("express");
 const jwt = require("jsonwebtoken");
-const User = require("../models/User");
+const Student = require("../models/Student");
 const sendMailOnRegister = require('../services/mail');
 
 const router = express.Router();
@@ -9,21 +9,21 @@ const JWT_SECRET = process.env.JWT_SECRET;
 
 // Signup route
 router.post("/register", async (req, res) => {
-  const { name, phone, college, email, password } = req.body;
+  const { name, phone, collegeId, email, password } = req.body;
 
   try {
-    let user = await User.findOne({ email });
-    if (user) {
+    let student = await Student.findOne({ email });
+    if (student) {
       return res
         .status(400)
         .json({ message: "User with this username or email already exists" });
     }
 
-    user = new User({ name, email, password, college, phone });
-    await user.save();
+    student = new Student({ name, email, password, collegeId, phone });
+    await student.save();
 
-    const payload = { userId: user.id };
-    const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "1h" });
+    const payload = { userId: student.id };
+    const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "1d" });
     
     sendMailOnRegister(email, name);
     
@@ -54,18 +54,18 @@ router.post("/register", async (req, res) => {
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
   try {
-    const user = await User.findOne({ email });
-    if (!user) {
+    const student = await Student.findOne({ email });
+    if (!student) {
       return res.status(400).json({ message: "Invalid credentials" });
     }
 
-    const isMatch = await user.comparePassword(password);
+    const isMatch = await student.comparePassword(password);
     if (!isMatch) {
       return res.status(400).json({ message: "Invalid credentials" });
     }
 
-    const payload = { userId: user.id };
-    const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "1h" });
+    const payload = { userId: student.id };
+    const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "1d" });
 
     res.status(200).json({
         data: {
