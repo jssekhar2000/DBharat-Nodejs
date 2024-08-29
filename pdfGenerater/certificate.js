@@ -24,7 +24,7 @@ const generateCertificate = async (userId) => {
    console.log('pdf generate started');
 
   const browser = await puppeteer.launch({
-    headless: true,
+    headless: false,
     args: [
       '--no-sandbox',
       '--disable-setuid-sandbox',
