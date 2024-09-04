@@ -37,7 +37,24 @@ const generateCertificate = async (userId) => {
 
   await page.setUserAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36")
   await page.setContent(html);
-  const pdfBuffer = await page.pdf({ format: 'A4',printBackground: true });
+
+  // Calculate the size of the content dynamically
+  const dimensions = await page.evaluate(() => {
+    const body = document.body;
+    return {
+      width: body.scrollWidth,
+      height: body.scrollHeight,
+    };
+  });
+
+
+  // Set custom width and height for the PDF
+  const pdfBuffer = await page.pdf({
+    height: '550px',
+    printBackground: true,
+  });
+
+  //const pdfBuffer = await page.pdf({ format: 'A4',printBackground: true });
   
   await browser.close();
 
